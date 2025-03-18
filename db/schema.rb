@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_17_180234) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_18_213420) do
+  create_table "event_guests", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.integer "guest_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id", "guest_id"], name: "index_event_guests_on_event_id_and_guest_id", unique: true
+    t.index ["event_id"], name: "index_event_guests_on_event_id"
+    t.index ["guest_id"], name: "index_event_guests_on_guest_id"
+  end
+
   create_table "events", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -22,6 +32,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_17_180234) do
     t.index ["place_id"], name: "index_events_on_place_id"
   end
 
+  create_table "guests", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_guests_on_email"
+  end
+
   create_table "places", force: :cascade do |t|
     t.string "name"
     t.string "address"
@@ -29,5 +47,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_17_180234) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "event_guests", "events"
+  add_foreign_key "event_guests", "guests"
   add_foreign_key "events", "places"
 end
