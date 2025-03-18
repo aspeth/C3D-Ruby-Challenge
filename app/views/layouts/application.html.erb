@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Events Manager</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_pack_tag "application" %>
+  </head>
+
+  <body>
+    <header>
+      <h1><%= link_to "Events Manager", root_path %></h1>
+      <nav>
+        <%= link_to "Create an Event", new_event_path %>
+      </nav>
+    </header>
+
+    <% if flash.notice.present? %>
+      <aside class="flash">
+        <%= flash.notice %>
+      </aside>
+    <% end %>
+
+    <main>
+      <%= yield %>
+    </main>
+  </body>
+</html>
