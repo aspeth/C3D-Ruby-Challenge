@@ -16,6 +16,7 @@ const GuestManager = ({ eventId }) => {
   const fetchGuests = async () => {
     setIsLoading(true);
     setErrors({});
+
     try {
       const response = await fetch(`/events/${eventId}/event_guests`);
       if (response.ok) {
@@ -81,12 +82,7 @@ const GuestManager = ({ eventId }) => {
       } else {
         const responseErrors = data.errors || ['Something went wrong'];
         const errorsObj = {};
-
-        responseErrors.forEach(err => {
-          if (err.includes('Name')) errorsObj.name = err;
-          else if (err.includes('Email')) errorsObj.email = err;
-          else errorsObj.general = err;
-        });
+        errorsObj.general = responseErrors[0].replace(/^Event /, '');
 
         setErrors(errorsObj);
       }
