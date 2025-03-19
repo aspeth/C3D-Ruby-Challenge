@@ -94,6 +94,30 @@ const GuestManager = ({ eventId }) => {
     }
   };
 
+  const handleRemove = async (guestId) => {
+    try {
+      const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+      const response = await fetch(`/events/${eventId}/event_guests/${guestId}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-Token': csrfToken
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setGuests(prevGuests => prevGuests.filter(guest => guest.id !== guestId));
+        setSuccessMessage('Guest removed successfully!');
+      } else {
+        setErrors({ general: data.errors?.[0] || 'Failed to remove guest. Please try again.' });
+      }
+    } catch (error) {
+      console.error('Error removing guest:', error);
+      setErrors({ general: 'Failed to remove guest. Please try again.' });
+    }
+  };
+
   return (
     <div className="guest-manager">
       <div className="guest-list">
@@ -117,6 +141,7 @@ const GuestManager = ({ eventId }) => {
               <tr>
                 <th>Name</th>
                 <th>Email</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -124,6 +149,16 @@ const GuestManager = ({ eventId }) => {
                 <tr key={guest.id}>
                   <td>{guest.name}</td>
                   <td>{guest.email}</td>
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleRemove(guest.id)}
+                      aria-label={`Remove ${guest.name}`}
+                    >
+                      Remove
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

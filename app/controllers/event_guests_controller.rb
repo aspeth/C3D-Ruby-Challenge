@@ -32,4 +32,15 @@ class EventGuestsController < ApplicationController
       }, status: :unprocessable_entity
     end
   end
+
+  def destroy
+    @event = Event.find(params[:event_id])
+    @event_guest = @event.event_guests.find_by!(guest_id: params[:id])
+
+    if @event_guest.destroy
+      render json: { success: true, message: "Guest removed successfully" }
+    else
+      render json: { success: false, errors: @event_guest.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
 end

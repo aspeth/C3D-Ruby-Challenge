@@ -9,6 +9,6 @@ Rails.application.routes.draw do
   root "events#index"
 
   resources :events do
-    resources :event_guests, only: [:index, :create]
+    resources :event_guests, only: [:index, :create, :destroy]
   end
 end
