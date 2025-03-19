@@ -15,16 +15,16 @@ const GuestManager = ({ eventId }) => {
 
   const fetchGuests = async () => {
     setIsLoading(true);
+    setErrors({});
     try {
       const response = await fetch(`/events/${eventId}/event_guests`);
       if (response.ok) {
         const data = await response.json();
         setGuests(data);
-      } else {
-        console.error('Failed to fetch guests');
       }
     } catch (error) {
       console.error('Error fetching guests:', error);
+      setErrors({ guestList: "There was a problem loading the guest list. Please try again later." });
     } finally {
       setIsLoading(false);
     }
@@ -69,12 +69,11 @@ const GuestManager = ({ eventId }) => {
       const data = await response.json();
 
       if (response.ok && data.success) {
+        setGuests(prevGuests => [...prevGuests, data.guest]);
+
         setName('');
         setEmail('');
         setSuccessMessage('Guest added successfully!');
-
-        // Refresh the guest list
-        fetchGuests();
       } else {
         const responseErrors = data.errors || ['Something went wrong'];
         const errorsObj = {};
@@ -101,6 +100,17 @@ const GuestManager = ({ eventId }) => {
         <h3>Current Guests ({guests.length})</h3>
         {isLoading ? (
           <p>Loading guests...</p>
+        ) : errors.guestList ? (
+          <div className="alert alert-warning" role="alert">
+            {errors.guestList}
+            <button
+              className="btn btn-link"
+              onClick={fetchGuests}
+              aria-label="Retry loading guest list"
+            >
+              Retry
+            </button>
+          </div>
         ) : guests.length > 0 ? (
           <table className="guest-table">
             <thead>
