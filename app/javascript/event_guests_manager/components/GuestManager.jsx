@@ -32,8 +32,12 @@ const GuestManager = ({ eventId }) => {
 
   const validateForm = () => {
     let formErrors = {};
-    if (!name.trim()) formErrors.name = "Name is required";
-    if (!email.trim()) {
+
+    if (name.trim().length === 0) {
+      formErrors.name = "Name is required";
+    }
+
+    if (email.trim().length === 0) {
       formErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       formErrors.email = "Email is invalid";
