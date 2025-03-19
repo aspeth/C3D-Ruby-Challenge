@@ -9,7 +9,6 @@ const GuestManager = ({ eventId }) => {
   const [guests, setGuests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch guests when component mounts
   useEffect(() => {
     fetchGuests();
   }, []);
@@ -98,7 +97,6 @@ const GuestManager = ({ eventId }) => {
 
   return (
     <div className="guest-manager">
-      {/* Guest List */}
       <div className="guest-list">
         <h3>Current Guests ({guests.length})</h3>
         {isLoading ? (
