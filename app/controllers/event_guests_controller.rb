@@ -10,8 +10,8 @@ class EventGuestsController < ApplicationController
     @event = Event.find(params[:event_id])
 
     # Find or create guest
-    @guest = Guest.find_or_initialize_by(email: params[:email].downcase)
-    @guest.name = params[:name] if @guest.new_record? || params[:update_existing]
+    @guest = Guest.find_or_initialize_by(email: guest_params[:email].downcase)
+    @guest.name = guest_params[:name] if @guest.new_record?
 
     unless @guest.save
       return render json: { success: false, errors: @guest.errors.full_messages }, status: :unprocessable_entity
@@ -42,5 +42,11 @@ class EventGuestsController < ApplicationController
     else
       render json: { success: false, errors: @event_guest.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  private
+
+  def guest_params
+    params.require(:guest).permit(:name, :email)
   end
 end

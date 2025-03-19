@@ -66,8 +66,10 @@ const GuestManager = ({ eventId }) => {
           'X-CSRF-Token': csrfToken
         },
         body: JSON.stringify({
-          name,
-          email
+          guest: {
+            name,
+            email
+          }
         })
       });
 
