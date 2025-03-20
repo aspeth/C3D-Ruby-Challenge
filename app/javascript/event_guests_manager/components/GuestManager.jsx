@@ -80,10 +80,9 @@ const GuestManager = ({ eventId }) => {
 
       if (response.ok && data.success) {
         setGuests(prevGuests => [...prevGuests, data.guest]);
-
         setName('');
         setEmail('');
-        setSuccessMessage('Guest added successfully!');
+        setSuccessMessage(data.message);
       } else {
         const responseErrors = data.errors || ['Something went wrong'];
         const errorsObj = {};
@@ -113,7 +112,7 @@ const GuestManager = ({ eventId }) => {
 
       if (response.ok && data.success) {
         setGuests(prevGuests => prevGuests.filter(guest => guest.id !== guestId));
-        setSuccessMessage('Guest removed successfully!');
+        setSuccessMessage(data.message);
       } else {
         setErrors({ general: data.errors?.[0] || 'Failed to remove guest. Please try again.' });
       }
