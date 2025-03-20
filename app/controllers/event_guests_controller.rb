@@ -14,7 +14,10 @@ class EventGuestsController < ApplicationController
     @guest.name = guest_params[:name] if @guest.new_record?
 
     unless @guest.save
-      return render json: { success: false, errors: @guest.errors.full_messages }, status: :unprocessable_entity
+      return render json: {
+        success: false,
+        errors: @guest.errors.full_messages
+      }, status: :unprocessable_entity
     end
 
     @event_guest = EventGuest.new(event_id: @event.id, guest_id: @guest.id)
@@ -38,9 +41,15 @@ class EventGuestsController < ApplicationController
     @event_guest = @event.event_guests.find_by!(guest_id: params[:id])
 
     if @event_guest.destroy
-      render json: { success: true, message: "Guest removed successfully" }
+      render json: {
+        success: true,
+        message: "Guest removed successfully"
+      }
     else
-      render json: { success: false, errors: @event_guest.errors.full_messages }, status: :unprocessable_entity
+      render json: {
+        success: false,
+        errors: @event_guest.errors.full_messages
+      }, status: :unprocessable_entity
     end
   end
 
